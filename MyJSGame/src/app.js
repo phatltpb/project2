@@ -1,7 +1,6 @@
 /** @format */
 
 var AppLayer = cc.Layer.extend({
-  // sprite: null,s
   component: null,
   ctor: function () {
     this._super();
@@ -10,28 +9,21 @@ var AppLayer = cc.Layer.extend({
     let title = new cc.LabelTTF("Cocos demo", "Arial", 38);
     title.x = size.width / 2;
     title.y = size.height / 2 + 270;
-
-    // title.setFontFillColor =
-
     // menu
-
     var button = new MenuItemFont(
         "BUTTON",
         20,
-        () => {
-          let bt = this.ButtonCreate();
-          this.addChild(bt);
-        }
-        // this.AddUi.bind(Components.button,this)
+        this.AddUi.bind(this, "button")
       ),
       text = new MenuItemFont("TEXT", 20, () => {
         let text = this.TextCreate();
         this.addChild(text);
       }),
-      imageView = new MenuItemFont("IMAGE VIEW", 20, () => {
-        let img = this.ImageCreate();
-        this.addChild(img);
-      }),
+      imageView = new MenuItemFont(
+        "IMAGE VIEW",
+        20,
+        this.AddUi.bind(this, Components.imageView)
+      ),
       checkBox = new MenuItemFont("CHECKBOX", 20, () => {
         let check = this.CheckBoxCreate();
         this.addChild(check);
@@ -49,10 +41,7 @@ var AppLayer = cc.Layer.extend({
           cc.log("SCROLL VIEW");
         }
       ),
-      pageView = new MenuItemFont("PAGE VIEW", 20, () => {
-        let pageView = this.PageCreate();
-        this.addChild(pageView);
-      }),
+      pageView = new MenuItemFont("PAGE VIEW", 20, this.AddUi.bind(this,Components.pageView)),
       listView = new MenuItemFont("LIST VIEW", 20, () => {
         let listView = this.ListView();
         this.addChild(listView);
@@ -87,7 +76,7 @@ var AppLayer = cc.Layer.extend({
       x: cc.winSize.width / 2,
       y: 100,
     });
-    return button;
+    return button
   },
   CheckBoxCreate: () => {
     var check = new ccui.CheckBox();
@@ -119,7 +108,7 @@ var AppLayer = cc.Layer.extend({
     );
     layout.setBackGroundColor(cc.color.BLUE);
 
-    return _layout;
+    return layout;
   },
   TextCreate: () => {
     var text = ccui.Text.create(
@@ -174,7 +163,7 @@ var AppLayer = cc.Layer.extend({
     listView.setDirection(ccui.ScrollView.DIR_VERTICAL);
     listView.setTouchEnabled(true);
     listView.setBounceEnabled(true);
-    // listView.setBackGroundImage("res/HelloWorld.png"); 
+    // listView.setBackGroundImage("res/HelloWorld.png");
     listView.setBackGroundImageScale9Enabled(true);
     listView.setContentSize(cc.size(400, 1280));
     listView.setAnchorPoint(cc.p(0.5, 0.5));
@@ -200,13 +189,22 @@ var AppLayer = cc.Layer.extend({
     }
     return listView;
   },
-  AddUi: (Components) => {
+  AddUi: function (Components) {
     var cp;
     switch (Components) {
-      case Components.button:
-        cp = this.ButtonCreate();
+      case Components=="button":
+        cp = this.ButtonCreate()
+        break;
+      default:
+        // cp = this.ButtonCreate()
+        break;
     }
-    this.addChild(cp);
+    var removeSelfAction = new cc.RemoveSelf(false);
+    if (this.component) {
+      this.component.runAction(removeSelfAction);
+    }
+    this.component = cp;
+    this.addChild(this.component);
   },
 });
 var AppScene = cc.Scene.extend({
