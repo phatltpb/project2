@@ -9,13 +9,16 @@
     "renderMode" : 0,
     "engineDir":"frameworks/cocos2d-html5",
 
-    "modules" : ["cocos2d", "extensions"],
+    "modules" : ["cocos2d","extensions","external"],
     "jsList" : [
         "src/resource.js",
         "src/app.js",
         "src/game/constants.js",
+        "src/game/sprites/background_sprite.js",
+        "src/game/classes/global_func.js",
         "src/game/layers/background_layer.js",
-        "src/game/sprites/background_sprite.js"
+        "src/game/components/Menu/menu.js",
+        "src/game/components/Menu/menuItemFont.js"
 
     ]
 }

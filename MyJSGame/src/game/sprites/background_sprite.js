@@ -1,11 +1,16 @@
-var BackGroundSprite = cc.Sprite.extend({
-    ctor:function(size,backgroundImages){
-            this._super();
-            this.initWithFile(backgroundImages);
-            this.setAnchorPoint(cc.p(0.5,0.5))
-            this.attr({
-                x:size.With*0.5,
-                y:size.Height*0.5,
-            })
-    }
-})
+/** @format */
+
+var BackgroundSprite = cc.Sprite.extend({
+  ctor: function (size, resBackGround) {
+    this._super();
+    this.initWithFile(resBackGround);
+
+    this.setPosition(
+      cc.p(size.width * 0.5, size.height * 0.5)
+    );
+    // this.attr({
+    //   x: _sizeScene.width / 2,
+    //   y: _sizeScene.height / 2,
+    // });
+  },
+});
