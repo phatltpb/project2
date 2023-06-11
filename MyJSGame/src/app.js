@@ -13,39 +13,48 @@ var AppLayer = cc.Layer.extend({
     var button = new MenuItemFont(
         "BUTTON",
         20,
-        this.AddUi.bind(this, "button")
+        this.addUI.bind(this, Components.button)
       ),
-      text = new MenuItemFont("TEXT", 20, () => {
-        let text = this.TextCreate();
-        this.addChild(text);
-      }),
+      text = new MenuItemFont(
+        "TEXT",
+        20,
+        this.addUI.bind(this, Components.text)
+      ),
       imageView = new MenuItemFont(
         "IMAGE VIEW",
         20,
-        this.AddUi.bind(this, Components.imageView)
+        this.addUI.bind(this, Components.imageView)
       ),
-      checkBox = new MenuItemFont("CHECKBOX", 20, () => {
-        let check = this.CheckBoxCreate();
-        this.addChild(check);
-
-        cc.log("ádasd");
-      }),
-      layout = new MenuItemFont("LAYOUT", 20, () => {
-        let layout = this.LayoutCreate();
-        this.addChild(layout);
-      }),
+      checkBox = new MenuItemFont(
+        "CHECKBOX",
+        20,
+        this.addUI.bind(this, Components.checkBox)
+      ),
+      layout = new MenuItemFont(
+        "LAYOUT",
+        20,
+        this.addUI.bind(this, Components.layout)
+      ),
       scrollView = new MenuItemFont(
         "SCROLL VIEW",
         20,
-        () => {
-          cc.log("SCROLL VIEW");
-        }
+        this.addUI.bind(this, Components.scrollView)
       ),
-      pageView = new MenuItemFont("PAGE VIEW", 20, this.AddUi.bind(this,Components.pageView)),
-      listView = new MenuItemFont("LIST VIEW", 20, () => {
-        let listView = this.ListView();
-        this.addChild(listView);
-      });
+      pageView = new MenuItemFont(
+        "PAGE VIEW",
+        20,
+        this.addUI.bind(this, Components.pageView)
+      ),
+      listView = new MenuItemFont(
+        "LIST VIEW",
+        20,
+        this.addUI.bind(this, Components.listView)
+      ),
+      animate = new MenuItemFont(
+        "animation",
+        20,
+        this.addUI.bind(this, Components.animate)
+      );
     let menu = new cc.Menu(
       button,
       text,
@@ -64,19 +73,23 @@ var AppLayer = cc.Layer.extend({
     _pageView.addPage(new ccui.Layout());
 
     //add child
-    // this.addChild(_pageView);
+    this.addChild(_pageView);
     this.addChild(title);
     this.addChild(menu);
     return true;
   },
-  ButtonCreate: () => {
+  onEnter: function () {
+    this._super();
+    globalFunc.playAudio(resAudio.resGame);
+  },
+  ButtonCreate: function () {
     var button = new ccui.Button();
     button.loadTextures(res.click_img);
     button.attr({
       x: cc.winSize.width / 2,
       y: 100,
     });
-    return button
+    return button;
   },
   CheckBoxCreate: () => {
     var check = new ccui.CheckBox();
@@ -103,19 +116,13 @@ var AppLayer = cc.Layer.extend({
     layout.setSizePercent(cc.p(0.25, 0.25));
     layout.setPositionType(ccui.Widget.POSITION_PERCENT);
     layout.setPositionPercent(cc.p(0.25, 0.25));
-    layout.setBackGroundColorType(
-      ccui.Layout.BG_COLOR_SOLID
-    );
+    layout.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
     layout.setBackGroundColor(cc.color.BLUE);
 
     return layout;
   },
   TextCreate: () => {
-    var text = ccui.Text.create(
-      "check text ui",
-      "Arial",
-      45
-    );
+    var text = ccui.Text.create("check text ui", "Arial", 45);
     text.setPosition(cc.p(cc.winSize.width * 0.5, 100));
     return text;
   },
@@ -129,12 +136,10 @@ var AppLayer = cc.Layer.extend({
       y: cc.winSize.height / 2,
     });
     var list = ["dau_la", "nnvh", "op", "tavt"];
-
     for (var i = 0; i < list.length; i++) {
       var layout = new ccui.Layout();
       var imageview = new ccui.ImageView();
-      let image_Show =
-        "res/images/listpage/" + list[i] + ".png";
+      let image_Show = "res/images/listpage/" + list[i] + ".png";
       imageview.loadTexture(image_Show);
       imageview.attr({
         x: pageview.width / 2,
@@ -167,17 +172,13 @@ var AppLayer = cc.Layer.extend({
     listView.setBackGroundImageScale9Enabled(true);
     listView.setContentSize(cc.size(400, 1280));
     listView.setAnchorPoint(cc.p(0.5, 0.5));
-    listView.setPosition(
-      cc.winSize.width / 2,
-      cc.winSize.height / 2
-    );
+    listView.setPosition(cc.winSize.width / 2, cc.winSize.height / 2);
     var list = ["dau_la", "nnvh", "op", "tavt"];
 
     for (var i = 0; i < list.length; i++) {
       var layout = new ccui.Layout();
       var imageview = new ccui.ImageView();
-      let image_Show =
-        "res/images/listpage/" + list[i] + ".png";
+      let image_Show = "res/images/listpage/" + list[i] + ".png";
       imageview.loadTexture(image_Show);
       imageview.attr({
         x: listView.width / 2,
@@ -189,21 +190,35 @@ var AppLayer = cc.Layer.extend({
     }
     return listView;
   },
-  AddUi: function (Components) {
-    var cp;
-    switch (Components) {
-      case Components=="button":
-        cp = this.ButtonCreate()
+  addUI: function (_component) {
+    var component;
+    switch (_component) {
+      case Components.button:
+        component = this.ButtonCreate();
         break;
+      case Components.text:
+        component = this.TextCreate();
+        break;
+      case Components.imageView:
+        component = this.ImageCreate();
+        break;
+      case Components.checkBox:
+        component = this.CheckBoxCreate();
+        break;
+      case Components.layout:
+        component = this.LayoutCreate();
+        break;
+      case Components.pageView:
+        component = this.PageCreate();
+        break;
+      case Components.animation:
+        component = this.createAnimation();
+      // break;
       default:
-        // cp = this.ButtonCreate()
         break;
     }
-    var removeSelfAction = new cc.RemoveSelf(false);
-    if (this.component) {
-      this.component.runAction(removeSelfAction);
-    }
-    this.component = cp;
+    if (this.component) this.component.removeFromParent(true);
+    this.component = component;
     this.addChild(this.component);
   },
 });
@@ -212,9 +227,7 @@ var AppScene = cc.Scene.extend({
     this._super();
     let layer = new AppLayer();
     this.addChild(layer, zIndexLayer.Main);
-    let background = new BackGroundLayer(
-      res.background_img
-    );
+    let background = new BackGroundLayer(res.background_img);
     this.addChild(background, zIndexLayer.Saver);
   },
 });

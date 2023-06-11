@@ -23,23 +23,25 @@
  ****************************************************************************/
 
 var res = {
-    HelloWorld_png : "res/HelloWorld.png",
-    background_img:"res/background/bg.png",
-    click_img:"res/images/click.png",
-    pause:"res/images/pausebut.png",
-    play:"res/images/playBut.png",
-    quit:"res/images/quitBut.png",
-    image_view:"res/images/hao-nguyet.jpg",
-    dl_png:"res/images/listpage/dau_la.png",
-    nnvh_png:"res/images/listpage/nnvh.png",
-    op_png:"res/images/listpage/op.png",
-    tavt_png:"res/images/listpage/tavt.png",
-    
-
-
+  HelloWorld_png: "res/HelloWorld.png",
+  background_img: "res/background/bg.png",
+  click_img: "res/images/click.png",
+  pause: "res/images/pausebut.png",
+  play: "res/images/playBut.png",
+  quit: "res/images/quitBut.png",
+  image_view: "res/images/hao-nguyet.jpg",
+  dl_png: "res/images/listpage/dau_la.png",
+  nnvh_png: "res/images/listpage/nnvh.png",
+  op_png: "res/images/listpage/op.png",
+  tavt_png: "res/images/listpage/tavt.png",
 };
-
+var resAudio = {
+  resGame: "res/audio/phaken.mp3",
+};
 var g_resources = [];
 for (var i in res) {
-    g_resources.push(res[i]);
+  g_resources.push(res[i]);
+}
+for (var i in resAudio) {
+  g_resources.push(resAudio[i]);
 }
